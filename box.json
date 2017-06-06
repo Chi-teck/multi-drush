@@ -1,0 +1,7 @@
+{
+  "chmod": "0755",
+  "directories": ["drush_8", "drush_9"],
+  "output": "drush.phar",
+  "main": "multi-drush.php",
+  "stub": true
+}

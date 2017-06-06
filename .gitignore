@@ -1,0 +1,8 @@
+drush.phar
+/drush_8/*
+!/drush_8/composer.json
+/drush_9/*
+!/drush_9/composer.json
+
+
+

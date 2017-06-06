@@ -1,0 +1,6 @@
+{
+    "require": {
+        "drush/drush": "~9.0"
+    },
+    "minimum-stability": "dev"
+}
