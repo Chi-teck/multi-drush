@@ -1,4 +1,4 @@
-# Multi Drush
+# MultiDrush
 
 A simple way to run multiple Drush versions on the same server.
 
