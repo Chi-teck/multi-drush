@@ -5,8 +5,48 @@
  * Drush launcher.
  */
 
+$drupal_root = FALSE;
+$drupal_version = FALSE;
+$drush_major_version = FALSE;
+
+// Lookup through directories to find Drupal installation.
+$path = getcwd();
+while ($path) {
+  if ($drupal_version = multi_drush_get_version($path)) {
+    $drupal_root = $path;
+    break;
+  }
+  elseif ($path == '/') {
+    break;
+  }
+  $path = dirname($path);
+}
+
+$drush_endpoint = '/vendor/drush/drush/drush.php';
+
+if ($drupal_root) {
+  // Support local Drush installation.
+  if (file_exists($drupal_root . $drush_endpoint)) {
+    require $drupal_root . $drush_endpoint;
+  }
+  // In Drupal composer project vendor directory is outside document root.
+  elseif (file_exists($drupal_root . '/..' . $drush_endpoint)) {
+    require $drupal_root . '/..' . $drush_endpoint;
+  }
+  // Run bundled Drush instance.
+  else {
+    // In 8.4 Drupal updated Symfony components.
+    $drush_major_version = version_compare($drupal_version, 8.4, '>') ? 9 : 8;
+    require __DIR__ . '/drush_' . $drush_major_version . $drush_endpoint;
+  }
+}
+// Use Drush 8 when no Drupal site was found.
+else {
+  require __DIR__ . '/drush_8' . $drush_endpoint;
+}
+
 /**
- * Returns Drupal version for a given path.
+ * Returns Drupal version.
  *
  * @param string $path
  *   Path start search.
@@ -36,18 +76,3 @@ function multi_drush_get_version($path) {
 
   return isset($matches[1]) ? $matches[1] : FALSE;
 }
-
-$drush_major_version = 8;
-$path = getcwd();
-while ($path) {
-  if ($drupal_version = multi_drush_get_version($path)) {
-    if (version_compare($drupal_version, 8.4, '>')) {
-      $drush_major_version = 9;
-    }
-    break;
-  }
-  $parent = dirname($path);
-  $path = in_array($parent, ['.', $path]) ? FALSE : $parent;
-}
-
-require "drush_$drush_major_version/vendor/drush/drush/drush.php";
