@@ -35,12 +35,12 @@ if ($drupal_root) {
   }
   // Run bundled Drush instance.
   else {
-    // In 8.4 Drupal updated Symfony components.
+    // Symfony components were updated in Drupal 8.4.
     $drush_major_version = version_compare($drupal_version, 8.4, '>') ? 9 : 8;
     require __DIR__ . '/drush_' . $drush_major_version . $drush_endpoint;
   }
 }
-// Use Drush 8 when no Drupal site was found.
+// Use Drush 8 if no Drupal site was found.
 else {
   require __DIR__ . '/drush_8' . $drush_endpoint;
 }

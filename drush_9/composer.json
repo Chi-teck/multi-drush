@@ -2,5 +2,8 @@
     "require": {
         "drush/drush": "~9.0"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "config": {
+        "preferred-install": "dist"
+    }
 }
